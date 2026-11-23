@@ -208,9 +208,13 @@ def main() -> None:
         raise ValueError(f"entry must be 1-{MAX_CHARS} characters, got {len(text)}")
     if not text.isdigit():
         raise ValueError(f"entry must be digits only, got {text!r}")
+    # Show the receipt on stdout, group by group, so a human running
+    # this locally can see where the number comes from -- the file
+    # itself still holds digits only, exactly what the gate wants.
+    breakdown = ", ".join(f"{name}={len(tabs)}" for name, tabs in TABS.items())
+    print(f"open tabs: {count} ({breakdown}) -> {OUTPUT_PATH}")
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT_PATH.write_text(text, encoding="utf-8")
-    print(f"open tabs: {count} -> {OUTPUT_PATH}")
 
 
 if __name__ == "__main__":
